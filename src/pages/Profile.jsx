@@ -10,13 +10,17 @@ import {
   query,
   where,
 } from 'firebase/firestore'
-import { UserCircle, Sparkles, Calendar, Kanban, Handshake } from 'lucide-react'
+import { UserCircle, Sparkles, Calendar, Kanban, Handshake, ShieldCheck } from 'lucide-react'
 import { db } from '../firebase'
 import { useAuth } from '../context/AuthContext'
 import SegmentedToggle from '../components/SegmentedToggle'
 import ToggleChips from '../components/ToggleChips'
 import ReputationStars from '../components/ReputationStars'
 import EmptyState from '../components/EmptyState'
+import SkillTag from '../components/SkillTag'
+import WashiTape from '../components/WashiTape'
+
+const TAG_ROTATE = [-2, 1.5, -1, 2, -1.5, 1]
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 const LEVELS = ['beginner', 'intermediate', 'advanced']
@@ -168,15 +172,22 @@ export default function Profile() {
   if (!user) return null
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <div className="flex items-center gap-2.5 mb-6">
-        <span className="sticker-sm w-9 h-9 flex items-center justify-center rounded-xl border-2 border-slate-900 dark:border-slate-950 bg-violet-400 dark:bg-violet-600 -rotate-3">
-          <UserCircle className="w-5 h-5 text-slate-900 dark:text-slate-950" />
-        </span>
-        <h1 className="font-display font-bold text-2xl text-slate-900 dark:text-slate-100">My profile</h1>
-      </div>
+    <div className="dot-grid min-h-[calc(100vh-64px)]">
+      <div className="max-w-2xl mx-auto p-6">
+        <div className="sticker relative flex items-center gap-4 mb-8 rounded-2xl border-2 border-slate-900 dark:border-slate-950 bg-white dark:bg-slate-800 p-5 overflow-hidden">
+          <WashiTape accent="teal" rotate={-6} className="-top-3 left-8" />
+          <span className="sticker-sm w-16 h-16 flex-shrink-0 flex items-center justify-center rounded-full border-2 border-slate-900 dark:border-slate-950 bg-violet-300 dark:bg-violet-600">
+            <UserCircle className="w-9 h-9 text-slate-900 dark:text-slate-950" />
+          </span>
+          <div>
+            <p className="text-[10px] font-semibold tracking-[0.25em] uppercase text-slate-400 dark:text-slate-500">
+              Student ID
+            </p>
+            <h1 className="font-display font-bold text-2xl text-slate-900 dark:text-slate-100">My profile</h1>
+          </div>
+        </div>
 
-      <form
+        <form
         onSubmit={handleSave}
         className="flex flex-col gap-6 mb-10 rounded-2xl border-2 border-slate-900 dark:border-slate-950 bg-white dark:bg-slate-800 p-5"
       >
@@ -202,19 +213,17 @@ export default function Profile() {
               Add
             </button>
           </div>
-          <ul className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3 min-h-[2rem]">
             {skills.map((s, i) => (
-              <li
+              <SkillTag
                 key={i}
-                className="sticker-sm text-xs font-medium rounded-lg px-2.5 py-1 border-2 border-slate-900 dark:border-slate-950 bg-violet-200 text-violet-900 dark:bg-violet-500/30 dark:text-violet-200"
-              >
-                {s.name} ({s.level}){' '}
-                <button type="button" onClick={() => removeSkill(i)} className="ml-1">
-                  ×
-                </button>
-              </li>
+                label={`${s.name} · ${s.level}`}
+                accent="violet"
+                rotate={TAG_ROTATE[i % TAG_ROTATE.length]}
+                onRemove={() => removeSkill(i)}
+              />
             ))}
-          </ul>
+          </div>
         </section>
 
         <section>
@@ -255,32 +264,46 @@ export default function Profile() {
             <Calendar className="w-4 h-4" />
             Availability
           </h2>
-          <div className="mb-3">
-            <ToggleChips options={DAYS} selected={days} onToggle={toggleDay} accent="violet" />
-          </div>
-          <div className="flex items-center gap-3 text-sm">
-            <label className="flex items-center gap-1.5">
-              From
-              <input
-                type="number"
-                min={0}
-                max={23}
-                value={startHour}
-                onChange={(e) => setStartHour(e.target.value)}
-                className={`${inputClass} w-16 py-1`}
-              />
-            </label>
-            <label className="flex items-center gap-1.5">
-              To
-              <input
-                type="number"
-                min={0}
-                max={23}
-                value={endHour}
-                onChange={(e) => setEndHour(e.target.value)}
-                className={`${inputClass} w-16 py-1`}
-              />
-            </label>
+          <div className="sticker-sm flex rounded-xl overflow-hidden border-2 border-slate-900 dark:border-slate-950">
+            <div className="relative w-9 flex-shrink-0 bg-violet-400 dark:bg-violet-600 flex items-center justify-center">
+              <span
+                className="text-[9px] font-bold tracking-[0.2em] text-slate-900 dark:text-slate-950 whitespace-nowrap"
+                style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+              >
+                DAY PASS
+              </span>
+              <span className="absolute -right-2 top-1/3 -translate-y-1/2 w-4 h-4 rounded-full bg-white dark:bg-slate-800 border-2 border-slate-900 dark:border-slate-950" />
+              <span className="absolute -right-2 bottom-1/3 translate-y-1/2 w-4 h-4 rounded-full bg-white dark:bg-slate-800 border-2 border-slate-900 dark:border-slate-950" />
+            </div>
+            <div className="flex-1 bg-white dark:bg-slate-800 p-4 border-l-2 border-dashed border-slate-300 dark:border-slate-600">
+              <div className="mb-3">
+                <ToggleChips options={DAYS} selected={days} onToggle={toggleDay} accent="violet" />
+              </div>
+              <div className="flex items-center gap-3 text-sm">
+                <label className="flex items-center gap-1.5">
+                  From
+                  <input
+                    type="number"
+                    min={0}
+                    max={23}
+                    value={startHour}
+                    onChange={(e) => setStartHour(e.target.value)}
+                    className={`${inputClass} w-16 py-1`}
+                  />
+                </label>
+                <label className="flex items-center gap-1.5">
+                  To
+                  <input
+                    type="number"
+                    min={0}
+                    max={23}
+                    value={endHour}
+                    onChange={(e) => setEndHour(e.target.value)}
+                    className={`${inputClass} w-16 py-1`}
+                  />
+                </label>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -342,16 +365,31 @@ export default function Profile() {
       </form>
 
       {profile && (
-        <div className="sticker rounded-2xl border-2 border-slate-900 dark:border-slate-950 bg-white dark:bg-slate-800 p-5 mb-10">
-          <h2 className="font-display font-bold mb-2">Saved profile</h2>
-          <div className="flex items-center gap-3 mb-2">
-            <strong>{profile.displayName}</strong>
-            <ReputationStars score={profile.reputationScore} verified={profile.verifiedBadge} />
-          </div>
-          <p className="text-sm text-slate-600 dark:text-slate-300 mb-1">
-            <Sparkles className="w-3.5 h-3.5 inline mr-1 text-violet-500" />
-            {skills.map((s) => `${s.name} (${s.level})`).join(', ') || '—'}
+        <div className="sticker relative rounded-2xl border-2 border-slate-900 dark:border-slate-950 bg-white dark:bg-slate-800 p-5 mb-10 overflow-hidden">
+          <WashiTape accent="amber" rotate={-5} className="-top-3 right-10" />
+          {profile.verifiedBadge && (
+            <div className="absolute top-2 right-2 w-16 h-16 rounded-full border-[3px] border-dashed border-teal-600 dark:border-teal-400 flex items-center justify-center -rotate-12 bg-teal-50/60 dark:bg-teal-500/10">
+              <div className="text-center leading-none">
+                <ShieldCheck className="w-4 h-4 text-teal-700 dark:text-teal-300 mx-auto mb-0.5" />
+                <span className="block text-[7px] font-bold text-teal-700 dark:text-teal-300 uppercase tracking-wider">
+                  Verified
+                </span>
+              </div>
+            </div>
+          )}
+          <p className="text-[10px] font-semibold tracking-[0.25em] uppercase text-slate-400 dark:text-slate-500 mb-1">
+            Saved profile
           </p>
+          <div className="flex items-center gap-3 mb-3">
+            <strong className="font-display text-lg">{profile.displayName}</strong>
+            <ReputationStars score={profile.reputationScore} verified={false} />
+          </div>
+          <div className="flex flex-wrap gap-2 mb-3">
+            {skills.map((s, i) => (
+              <SkillTag key={i} label={`${s.name} · ${s.level}`} accent="violet" rotate={TAG_ROTATE[i % TAG_ROTATE.length]} />
+            ))}
+            {skills.length === 0 && <span className="text-sm text-slate-400">No skills added yet</span>}
+          </div>
           <p className="text-sm text-slate-600 dark:text-slate-300 mb-1">Interests: {interests.join(', ') || '—'}</p>
           <p className="text-sm text-slate-600 dark:text-slate-300 mb-1">
             <Calendar className="w-3.5 h-3.5 inline mr-1 text-violet-500" />
@@ -452,6 +490,7 @@ export default function Profile() {
           ))}
         </ul>
       </section>
+      </div>
     </div>
   )
 }

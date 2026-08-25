@@ -46,3 +46,38 @@ body {
     linear-gradient(90deg, var(--check-line) 1px, transparent 1px);
   background-size: 28px 28px;
 }
+
+/* Torn-paper bottom edge for the "flyer" post-a-project card */
+.torn-bottom {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 95%,
+    96% 100%,
+    92% 94%,
+    88% 100%,
+    84% 94%,
+    80% 100%,
+    76% 94%,
+    72% 100%,
+    68% 94%,
+    64% 100%,
+    60% 94%,
+    56% 100%,
+    52% 94%,
+    48% 100%,
+    44% 94%,
+    40% 100%,
+    36% 94%,
+    32% 100%,
+    28% 94%,
+    24% 100%,
+    20% 94%,
+    16% 100%,
+    12% 94%,
+    8% 100%,
+    4% 94%,
+    0% 100%
+  );
+  padding-bottom: 1.5rem;
+}
