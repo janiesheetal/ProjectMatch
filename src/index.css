@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --hard-shadow: 5px 5px 0 0 rgba(15, 23, 42, 0.9);
+  --hard-shadow-sm: 3px 3px 0 0 rgba(15, 23, 42, 0.9);
+  --dot-color: rgba(15, 23, 42, 0.15);
+  --check-line: rgba(15, 23, 42, 0.08);
+  --check-bg: #f4ead6;
+}
+
+.dark:root,
+.dark {
+  --hard-shadow: 5px 5px 0 0 rgba(0, 0, 0, 0.7);
+  --hard-shadow-sm: 3px 3px 0 0 rgba(0, 0, 0, 0.7);
+  --dot-color: rgba(226, 232, 240, 0.12);
+  --check-line: rgba(226, 232, 240, 0.08);
+  --check-bg: #2a2313;
+}
+
+body {
+  margin: 0;
+  font-family: 'Sora', system-ui, sans-serif;
+}
+
+.sticker {
+  box-shadow: var(--hard-shadow);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.sticker-sm {
+  box-shadow: var(--hard-shadow-sm);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.dot-grid {
+  background-image: radial-gradient(var(--dot-color) 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
+}
+
+/* Corkboard / graph-paper feel for the corridor board */
+.checked-board {
+  background-color: var(--check-bg);
+  background-image: linear-gradient(var(--check-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--check-line) 1px, transparent 1px);
+  background-size: 28px 28px;
+}

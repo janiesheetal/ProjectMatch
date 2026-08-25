@@ -1,0 +1,43 @@
+rules_version = '2';
+
+// Permissive demo rules — any authenticated user can read/write.
+// Not production-grade; scoped intentionally for a time-boxed hackathon MVP.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /projects/{projectId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /matches/{matchId} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /messages/{matchId}/thread/{messageId} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /boardPosts/{postId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /topicRooms/{topicId}/posts/{postId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    match /dms/{dmId} {
+      allow read, write: if request.auth != null;
+    }
+
+    match /dms/{dmId}/thread/{messageId} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
