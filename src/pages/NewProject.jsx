@@ -73,7 +73,9 @@ export default function NewProject() {
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <label htmlFor="project-title" className="sr-only">Project title</label>
             <input
+              id="project-title"
               type="text"
               placeholder="Give it a headline"
               value={title}
@@ -81,7 +83,9 @@ export default function NewProject() {
               className={`${inputClass} font-display font-semibold text-lg`}
               required
             />
+            <label htmlFor="project-description" className="sr-only">Description</label>
             <textarea
+              id="project-description"
               placeholder="What are you building? Who do you need?"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -91,8 +95,8 @@ export default function NewProject() {
             />
 
             <div>
-              <label className="block text-sm font-medium mb-2">Context type</label>
-              <div className="flex flex-wrap gap-2">
+              <label id="context-type-label" className="block text-sm font-medium mb-2">Context type</label>
+              <div role="radiogroup" aria-labelledby="context-type-label" className="flex flex-wrap gap-2">
                 {CONTEXT_TYPES.map((t) => {
                   const meta = CONTEXT_META[t]
                   const Icon = meta.icon
@@ -102,6 +106,8 @@ export default function NewProject() {
                       type="button"
                       key={t}
                       onClick={() => setContextType(t)}
+                      role="radio"
+                      aria-checked={active}
                       className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold rounded-lg border-2 border-slate-900 dark:border-slate-950 transition-all duration-150 ${
                         active
                           ? `sticker-sm ${ACCENTS[meta.accent].chipActive}`
@@ -122,7 +128,9 @@ export default function NewProject() {
                 Required skills
               </label>
               <div className="flex gap-2 mb-3">
+                <label htmlFor="project-skill-input" className="sr-only">Add a required skill</label>
                 <input
+                  id="project-skill-input"
                   type="text"
                   placeholder="e.g. React"
                   value={skillInput}
@@ -150,14 +158,18 @@ export default function NewProject() {
               </div>
             </div>
 
+            <label htmlFor="project-commitment" className="sr-only">Commitment level</label>
             <input
+              id="project-commitment"
               type="text"
               placeholder="Commitment level (e.g. 5 hrs/week)"
               value={commitmentLevel}
               onChange={(e) => setCommitmentLevel(e.target.value)}
               className={inputClass}
             />
+            <label htmlFor="project-timeline" className="sr-only">Timeline</label>
             <input
+              id="project-timeline"
               type="text"
               placeholder="Timeline (e.g. 48 hours, or Sept-Dec)"
               value={timeline}

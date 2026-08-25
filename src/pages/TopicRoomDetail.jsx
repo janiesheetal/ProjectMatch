@@ -82,7 +82,9 @@ export default function TopicRoomDetail() {
       </div>
 
       <form onSubmit={handlePost} className="flex gap-2">
+        <label htmlFor="topic-post" className="sr-only">{`Post in #${topic.label}`}</label>
         <input
+          id="topic-post"
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}

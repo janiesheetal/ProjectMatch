@@ -38,6 +38,7 @@ export default function NavBar() {
             <NavLink
               key={to}
               to={to}
+              aria-label={label}
               className={({ isActive }) =>
                 `flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border-2 font-medium transition-all duration-150 ${
                   isActive
@@ -54,6 +55,7 @@ export default function NavBar() {
         {user ? (
           <button
             onClick={handleLogout}
+            aria-label="Log out"
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border-2 border-transparent text-slate-600 dark:text-slate-300 hover:border-slate-900 dark:hover:border-slate-600 hover:-translate-y-0.5 transition-all duration-150"
           >
             <LogOut className="w-4 h-4" />

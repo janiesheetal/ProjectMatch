@@ -50,7 +50,9 @@ export default function Signup() {
           <h1 className="font-display font-bold text-2xl">Sign up</h1>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <label htmlFor="signup-name" className="sr-only">Display name</label>
           <input
+            id="signup-name"
             type="text"
             placeholder="Display name"
             value={displayName}
@@ -58,7 +60,9 @@ export default function Signup() {
             className="rounded-lg px-3 py-2 border-2 border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:border-violet-500 dark:focus:border-violet-500 outline-none transition-colors duration-150"
             required
           />
+          <label htmlFor="signup-email" className="sr-only">Email</label>
           <input
+            id="signup-email"
             type="email"
             placeholder="Email"
             value={email}
@@ -66,7 +70,9 @@ export default function Signup() {
             className="rounded-lg px-3 py-2 border-2 border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:border-violet-500 dark:focus:border-violet-500 outline-none transition-colors duration-150"
             required
           />
+          <label htmlFor="signup-password" className="sr-only">Password</label>
           <input
+            id="signup-password"
             type="password"
             placeholder="Password"
             value={password}

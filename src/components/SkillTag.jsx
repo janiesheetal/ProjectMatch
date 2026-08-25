@@ -11,7 +11,7 @@ export default function SkillTag({ label, accent = 'violet', onRemove, rotate = 
       <span className="absolute left-1.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white/80 border border-slate-900/50" />
       {label}
       {onRemove && (
-        <button type="button" onClick={onRemove} className="ml-0.5 leading-none">
+        <button type="button" onClick={onRemove} aria-label={`Remove ${label}`} className="ml-0.5 leading-none">
           ×
         </button>
       )}

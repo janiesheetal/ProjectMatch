@@ -35,7 +35,9 @@ export default function Login() {
           <h1 className="font-display font-bold text-2xl">Log in</h1>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <label htmlFor="login-email" className="sr-only">Email</label>
           <input
+            id="login-email"
             type="email"
             placeholder="Email"
             value={email}
@@ -43,7 +45,9 @@ export default function Login() {
             className="rounded-lg px-3 py-2 border-2 border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 focus:border-violet-500 dark:focus:border-violet-500 outline-none transition-colors duration-150"
             required
           />
+          <label htmlFor="login-password" className="sr-only">Password</label>
           <input
+            id="login-password"
             type="password"
             placeholder="Password"
             value={password}

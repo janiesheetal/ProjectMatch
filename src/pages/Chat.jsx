@@ -100,7 +100,9 @@ export default function Chat() {
         <div ref={bottomRef} />
       </div>
       <form onSubmit={sendMessage} className="flex gap-2">
+        <label htmlFor="chat-message" className="sr-only">Type a message</label>
         <input
+          id="chat-message"
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}

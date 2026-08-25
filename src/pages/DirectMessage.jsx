@@ -87,7 +87,9 @@ export default function DirectMessage() {
         <div ref={bottomRef} />
       </div>
       <form onSubmit={sendMessage} className="flex gap-2">
+        <label htmlFor="dm-message" className="sr-only">Type a message</label>
         <input
+          id="dm-message"
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}

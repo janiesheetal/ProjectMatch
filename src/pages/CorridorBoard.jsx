@@ -91,7 +91,9 @@ export default function CorridorBoard() {
           onSubmit={handlePost}
           className="sticker rounded-2xl border-2 border-slate-900 dark:border-slate-950 bg-white dark:bg-slate-800 p-4 mb-10"
         >
+          <label htmlFor="board-note" className="sr-only">What are you thinking about building?</label>
           <textarea
+            id="board-note"
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="What are you thinking about building?"

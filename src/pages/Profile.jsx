@@ -90,22 +90,33 @@ export default function Profile() {
       query(collection(db, 'matches'), where('status', '==', 'accepted'))
     )
 
-    const invites = []
-    const requestsToMine = []
-    for (const d of requestedSnap.docs) {
-      const m = { id: d.id, ...d.data() }
-      if (m.candidateId === user.uid) {
-        const projSnap = await getDoc(doc(db, 'projects', m.projectId))
-        invites.push({ ...m, projectTitle: projSnap.exists() ? projSnap.data().title : '(deleted project)' })
-      } else if (myProjectIds.has(m.projectId)) {
-        const candSnap = await getDoc(doc(db, 'users', m.candidateId))
-        requestsToMine.push({
-          ...m,
-          projectTitle: projectTitleById.get(m.projectId),
-          candidateName: candSnap.exists() ? candSnap.data().displayName : 'Unknown user',
-        })
-      }
-    }
+    const relevantRequested = requestedSnap.docs
+      .map((d) => ({ id: d.id, ...d.data() }))
+      .filter((m) => m.candidateId === user.uid || myProjectIds.has(m.projectId))
+
+    // Fire the per-match lookups in parallel instead of one round trip at a time.
+    const [invites, requestsToMine] = await Promise.all([
+      Promise.all(
+        relevantRequested
+          .filter((m) => m.candidateId === user.uid)
+          .map(async (m) => {
+            const projSnap = await getDoc(doc(db, 'projects', m.projectId))
+            return { ...m, projectTitle: projSnap.exists() ? projSnap.data().title : '(deleted project)' }
+          })
+      ),
+      Promise.all(
+        relevantRequested
+          .filter((m) => m.candidateId !== user.uid && myProjectIds.has(m.projectId))
+          .map(async (m) => {
+            const candSnap = await getDoc(doc(db, 'users', m.candidateId))
+            return {
+              ...m,
+              projectTitle: projectTitleById.get(m.projectId),
+              candidateName: candSnap.exists() ? candSnap.data().displayName : 'Unknown user',
+            }
+          })
+      ),
+    ])
 
     const matches = []
     for (const d of acceptedSnap.docs) {
@@ -197,7 +208,9 @@ export default function Profile() {
             Skills
           </h2>
           <div className="flex flex-wrap items-center gap-2 mb-2">
+            <label htmlFor="profile-skill-name" className="sr-only">Skill name</label>
             <input
+              id="profile-skill-name"
               type="text"
               placeholder="Skill name"
               value={skillName}
@@ -229,7 +242,9 @@ export default function Profile() {
         <section>
           <h2 className="font-semibold mb-2 text-violet-600 dark:text-violet-400">Interests</h2>
           <div className="flex gap-2 mb-2">
+            <label htmlFor="profile-interest-input" className="sr-only">Add an interest</label>
             <input
+              id="profile-interest-input"
               type="text"
               placeholder="Add an interest"
               value={interestInput}
@@ -251,7 +266,7 @@ export default function Profile() {
                 className="sticker-sm text-xs font-medium rounded-lg px-2.5 py-1 border-2 border-slate-900 dark:border-slate-950 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300"
               >
                 {s}{' '}
-                <button type="button" onClick={() => removeInterest(i)} className="ml-1">
+                <button type="button" onClick={() => removeInterest(i)} aria-label={`Remove ${s}`} className="ml-1">
                   ×
                 </button>
               </li>
@@ -308,8 +323,11 @@ export default function Profile() {
         </section>
 
         <section>
-          <h2 className="font-semibold mb-2 text-violet-600 dark:text-violet-400">Experience note</h2>
+          <label htmlFor="profile-experience" className="block font-semibold mb-2 text-violet-600 dark:text-violet-400">
+            Experience note
+          </label>
           <textarea
+            id="profile-experience"
             value={experienceNote}
             onChange={(e) => setExperienceNote(e.target.value)}
             className={`${inputClass} w-full`}
@@ -318,8 +336,11 @@ export default function Profile() {
         </section>
 
         <section>
-          <h2 className="font-semibold mb-2 text-violet-600 dark:text-violet-400">Portfolio link (optional)</h2>
+          <label htmlFor="profile-portfolio" className="block font-semibold mb-2 text-violet-600 dark:text-violet-400">
+            Portfolio link (optional)
+          </label>
           <input
+            id="profile-portfolio"
             type="url"
             value={portfolioLink}
             onChange={(e) => setPortfolioLink(e.target.value)}

@@ -11,6 +11,7 @@ export default function ToggleChips({ options, selected, onToggle, accent = 'vio
             type="button"
             key={opt}
             onClick={() => onToggle(opt)}
+            aria-pressed={active}
             className={`px-3 py-1.5 text-xs font-semibold rounded-lg border-2 border-slate-900 dark:border-slate-950 transition-all duration-150 ${
               active
                 ? `sticker-sm ${ACCENTS[accent].chipActive}`

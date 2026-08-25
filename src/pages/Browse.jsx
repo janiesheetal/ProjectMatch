@@ -76,7 +76,7 @@ export default function Browse() {
       </div>
 
       <div className="max-w-5xl mx-auto px-6 pt-8 pb-16">
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div role="group" aria-label="Filter by context type" className="flex flex-wrap gap-2 mb-8">
           {CONTEXT_TYPES.map((t) => {
             const meta = CONTEXT_META[t]
             const Icon = meta.icon
@@ -85,6 +85,7 @@ export default function Browse() {
               <button
                 key={t}
                 onClick={() => toggleFilter(t)}
+                aria-pressed={active}
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold rounded-lg border-2 border-slate-900 dark:border-slate-950 transition-all duration-150 ${
                   active ? `sticker-sm ${ACCENTS[meta.accent].chipActive}` : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:-translate-y-0.5'
                 }`}
